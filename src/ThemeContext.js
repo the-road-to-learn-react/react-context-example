@@ -1,5 +1,6 @@
 import React from 'react';
 
-const ThemeContext = React.createContext(null); // could use 'green' as initial value here as well
+// could have 'green' as initial value here as well
+const ThemeContext = React.createContext(null);
 
 export default ThemeContext;

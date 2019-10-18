@@ -2,77 +2,43 @@ import React from 'react';
 
 import ThemeContext from './ThemeContext';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Headline>Hello React</Headline>
+const App = () => (
+  <div>
+    <PrimaryHeadline>Hello React Context</PrimaryHeadline>
 
-        <Paragraph>
-          That's how you would use children in React
-        </Paragraph>
+    <Paragraph>
+      That's how you use children in React by the way.
+    </Paragraph>
 
-        <SubHeadlineWithContext>
-          Children and Context
-        </SubHeadlineWithContext>
-      </div>
-    );
-  }
-}
+    <SecondaryHeadline>
+      With a React useContext Hook instead of Consumer component this
+      time!
+    </SecondaryHeadline>
+  </div>
+);
 
-// (Functional Sateless Component) Context Consumer
+// Component consuming Context via Consumer component
 
-function Headline(props) {
-  return (
-    <ThemeContext.Consumer>
-      {coloredTheme =>
-        <h1 style={{ color: coloredTheme }}>
-          {props.children}
-        </h1>
-      }
-    </ThemeContext.Consumer>
-  );
-}
+const PrimaryHeadline = ({ children }) => (
+  <ThemeContext.Consumer>
+    {value => <h1 style={{ color: value }}>{children}</h1>}
+  </ThemeContext.Consumer>
+);
 
-// (ES Class Component) Context Consumer
+// Component consuming Context via Consumer component
 
-class Paragraph extends React.Component {
-  render() {
-    return (
-      <ThemeContext.Consumer>
-        {coloredTheme =>
-          <p style={{ color: coloredTheme }}>
-            {this.props.children}
-          </p>
-        }
-      </ThemeContext.Consumer>
-    );
-  }
-}
+const Paragraph = ({ children }) => (
+  <ThemeContext.Consumer>
+    {color => <p style={{ color: color }}>{children}</p>}
+  </ThemeContext.Consumer>
+);
 
-// HOC as Context Consumer (1)
+// Component consuming Context via React's useContext Hook
 
-const getContext = Component =>
-  class GetContext extends React.Component {
-    render() {
-      return (
-        <ThemeContext.Consumer>
-          {coloredTheme => <Component { ...this.props } coloredTheme={coloredTheme} />}
-        </ThemeContext.Consumer>
-      );
-    }
-  }
+const SecondaryHeadline = ({ children }) => {
+  const color = React.useContext(ThemeContext);
 
-// Component using the HOC (1) to consume context
-
-function SubHeadline(props) {
-  return (
-    <h2 style={{ color: props.coloredTheme }}>
-      {props.children}
-    </h2>
-  );
-}
-
-const SubHeadlineWithContext = getContext(SubHeadline);
+  return <h2 style={{ color }}>{children}</h2>;
+};
 
 export default App;
